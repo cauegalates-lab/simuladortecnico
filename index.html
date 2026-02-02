@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA Matrícula Pro | Unidade Central</title>
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4712/4712139.png">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --p: #4f46e5; --s: #10b981; --danger: #ef4444; --orange: #f59e0b; --blue: #3b82f6; --teal: #0d9488; --dark: #0f172a; --gray: #f8fafc; }
+        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: #f1f5f9; padding: 20px; display: flex; justify-content: center; flex-direction: column; align-items: center; }
+        .app { width: 100%; max-width: 1200px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
+        .header { grid-column: 1 / -1; text-align: center; padding: 20px; background: var(--dark); color: white; border-radius: 20px; margin-bottom: 10px; }
+        textarea { width: 100%; height: 230px; border: 2px solid #e2e8f0; border-radius: 16px; padding: 15px; font-size: 14px; background: var(--gray); resize: none; }
+        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 10px 0; }
+        label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        input, select { width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid #e2e8f0; font-size: 14px; background: white; }
+        .actions-group { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #e2e8f0; }
+        .combo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
+        .btn { width: 100%; padding: 14px; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 12px; }
+        .btn-p { background: var(--p); color: white; font-size: 16px; padding: 18px; }
+        .btn-p:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4); }
+        .btn-combo-ef12 { background: var(--orange); color: white; }
+        .btn-combo-ef4 { background: var(--teal); color: white; }
+        .btn-clear { background: #f1f5f9; color: #64748b; margin-top: 10px; }
+        .btn-clear:hover { background: var(--danger); color: white; }
+        .result { background: var(--dark); color: #e2e8f0; padding: 25px; border-radius: 20px; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 13px; min-height: 600px; }
+        .copy-btn { background: var(--s); color: white; margin-top: 15px; }
+        footer { margin-top: 30px; color: #64748b; font-size: 13px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; width: 100%; max-width: 400px; }
+        .dev-tag { font-weight: 700; color: var(--p); }
+    </style>
+</head>
+<body>
+
+<div class="app">
+    <header class="header">
+        <h1 style="margin:0; font-size: 24px;">Sistema Unidade Central</h1>
+        <p style="margin:5px 0 0; opacity: 0.7;">Inteligência Artificial de Matrículas</p>
+    </header>
+
+    <div class="card">
+        <label>Dados Brutos do Aluno</label>
+        <textarea id="rawInput" placeholder="Cole os dados aqui..."></textarea>
+        
+        <div class="input-row">
+            <div>
+                <label>Origem da Venda</label>
+                <input type="text" id="origem" value="RD STATION">
+            </div>
+            <div>
+                <label>Vendedor</label>
+                <select id="vendedor" onchange="salvarVendedor()">
+                    <option value="Amanda Prado">Amanda Prado</option>
+                    <option value="Ana Flavia Victorino">Ana Flavia Victorino</option>
+                    <option value="Ana Luiza">Ana Luiza</option>
+                    <option value="Beatriz Cunha">Beatriz Cunha</option>
+                    <option value="Bianca Domingues">Bianca Domingues</option>
+                    <option value="Bruna Faria">Bruna Faria</option>
+                    <option value="Cauê Galates">Cauê Galates</option>
+                    <option value="Daniela Moura">Daniela Moura</option>
+                    <option value="Edivania Vital">Edivania Vital</option>
+                    <option value="Fabiana Godoy">Fabiana Godoy</option>
+                    <option value="Gabriel Gorgonio">Gabriel Gorgonio</option>
+                    <option value="Gabriela Campos">Gabriela Campos</option>
+                    <option value="Gabrielle Andrade">Gabrielle Andrade</option>
+                    <option value="Giovana Galdino">Giovana Galdino</option>
+                    <option value="Giseli de Jesus">Giseli de Jesus</option>
+                    <option value="Ketlyn Alves">Ketlyn Alves</option>
+                    <option value="Kevyn Barros">Kevyn Barros</option>
+                    <option value="Letícia Goretti">Letícia Goretti</option>
+                    <option value="Leticia Vieira">Leticia Vieira</option>
+                    <option value="Luana Ferreira">Luana Ferreira</option>
+                    <option value="Maria Isabelle">Maria Isabelle</option>
+                    <option value="Maria Laura">Maria Laura</option>
+                    <option value="Nathalia Domingos">Nathalia Domingos</option>
+                    <option value="Pedro Sales">Pedro Sales</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div>
+                <label>Tipo de Curso</label>
+                <select id="tipo">
+                    <option value="">Selecione...</option>
+                    <option value="Graduação">Graduação</option>
+                    <option value="Tecnólogo">Tecnólogo</option>
+                    <option value="Pós-graduação">Pós-graduação</option>
+                    <option value="2ª Licenciatura">2ª Licenciatura</option>
+                    <option value="R2">R2</option>
+                    <option value="Aperfeiçoamento">Aperfeiçoamento</option>
+                    <option value="Extensão">Extensão</option>
+                    <option value="2ª Graduação">2ª Graduação</option>
+                </select>
+            </div>
+            <div>
+                <label>Nome do Curso</label>
+                <input type="text" id="curso" placeholder="Ex: Pedagogia">
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div>
+                <label>Carga Horária</label>
+                <input type="text" id="carga" placeholder="Ex: 1000h">
+            </div>
+            <div>
+                <label>Brinde</label>
+                <input type="text" id="brinde" placeholder="Ex: Tablet">
+            </div>
+        </div>
+
+        <div class="input-row">
+            <div>
+                <label>Financeiro</label>
+                <select id="financeiro">
+                    <option value="">Pagamento...</option>
+                    <option value="Boleto">Boleto</option>
+                    <option value="Cartão">Cartão</option>
+                    <option value="Quitado">Quitado</option>
+                </select>
+            </div>
+            <div>
+                <label>Valor R$</label>
+                <input type="text" id="valor" placeholder="Selecione um combo ou digite">
+            </div>
+        </div>
+
+        <div style="margin-top: 10px;">
+            <label>Vencimento</label>
+            <input type="text" id="vencimento" placeholder="Preenchimento Automático">
+        </div>
+
+        <div style="margin-top: 20px;">
+            <button class="btn btn-p" onclick="processarIA()"><i class="fa-solid fa-wand-magic-sparkles"></i> GERAR REQUERIMENTO AGORA</button>
+        </div>
+
+        <div class="actions-group">
+            <label style="text-align: center; margin-bottom: 10px;">Ações Rápidas & Combos</label>
+            
+            <label style="font-size: 9px; margin-top: 10px;">Ed. Física 12 Meses (2ª Graduação)</label>
+            <div class="combo-grid">
+                <button class="btn btn-combo-ef12" onclick="aplicarCombo('Bacharel12')">BACHAREL 12M</button>
+                <button class="btn btn-combo-ef12" onclick="aplicarCombo('Licenc12')">LICENC. 12M</button>
+            </div>
+
+            <label style="font-size: 9px; margin-top: 10px;">Ed. Física 4 Anos (Graduação)</label>
+            <div class="combo-grid">
+                <button class="btn btn-combo-ef4" onclick="aplicarCombo('Bacharel4')">BACHAREL 4A</button>
+                <button class="btn btn-combo-ef4" onclick="aplicarCombo('Licenc4')">LICENC. 4A</button>
+            </div>
+
+            <button class="btn btn-clear" onclick="limparTudo()">LIMPAR FORMULÁRIO</button>
+        </div>
+    </div>
+
+    <div class="card">
+        <label>Requerimento Pronto para WhatsApp</label>
+        <div class="result" id="output">Os dados processados aparecerão aqui...</div>
+        <button class="btn copy-btn" onclick="copiar()"><i class="fa-solid fa-copy"></i> COPIAR TEXTO</button>
+    </div>
+</div>
+
+<footer>
+    Desenvolvido por <span class="dev-tag">@Cauê Galates</span> • 2026
+</footer>
+
+<script>
+    // FUNÇÃO PARA PERSISTIR O VENDEDOR
+    function salvarVendedor() {
+        const selecao = document.getElementById('vendedor').value;
+        localStorage.setItem('vendedorFixo', selecao);
+    }
+
+    function carregarVendedor() {
+        const salvo = localStorage.getItem('vendedorFixo');
+        if (salvo) {
+            document.getElementById('vendedor').value = salvo;
+        }
+    }
+
+    // Carrega o nome assim que a página abre
+    window.onload = carregarVendedor;
+
+    function calcularVencimentoInteligente() {
+        const hoje = new Date().getDate();
+        if (hoje >= 5 && hoje <= 13) return "10";
+        if (hoje >= 14 && hoje <= 24) return "20";
+        return "30";
+    }
+
+    function aplicarCombo(variante) {
+        document.getElementById('financeiro').value = "Boleto";
+        document.getElementById('vencimento').value = calcularVencimentoInteligente();
+        const tipo = document.getElementById('tipo');
+        const valor = document.getElementById('valor');
+        const curso = document.getElementById('curso');
+
+        switch(variante) {
+            case 'Bacharel12':
+                tipo.value = "2ª Graduação";
+                valor.value = "1+12X DE R$159,00";
+                curso.value = "BACHAREL EM EDUCAÇÃO FÍSICA 12 MESES";
+                break;
+            case 'Licenc12':
+                tipo.value = "2ª Graduação";
+                valor.value = "1+12X DE R$159,00";
+                curso.value = "LICENCIATURA EM EDUCAÇÃO FÍSICA 12 MESES";
+                break;
+            case 'Bacharel4':
+                tipo.value = "Graduação";
+                valor.value = "1+48x de R$146,86";
+                curso.value = "BACHARELADO EM EDUCAÇÃO FÍSICA 4 ANOS";
+                break;
+            case 'Licenc4':
+                tipo.value = "Graduação";
+                valor.value = "1+48x de R$146,86";
+                curso.value = "LICENCIATURA EM EDUCAÇÃO FÍSICA 4 ANOS";
+                break;
+        }
+    }
+
+    function limparTudo() {
+        const ids = ['rawInput', 'curso', 'carga', 'brinde', 'valor', 'vencimento'];
+        ids.forEach(id => document.getElementById(id).value = "");
+        document.getElementById('tipo').selectedIndex = 0;
+        document.getElementById('financeiro').selectedIndex = 0;
+        document.getElementById('output').innerText = "Os dados processados aparecerão aqui...";
+    }
+
+    function processarIA() {
+        const raw = document.getElementById('rawInput').value;
+        if (!raw) { alert("Cole os dados primeiro!"); return; }
+
+        if (!document.getElementById('vencimento').value) {
+            document.getElementById('vencimento').value = calcularVencimentoInteligente();
+        }
+
+        const linhas = raw.split('\n').map(l => l.trim()).filter(l => l.length > 1);
+        let aluno = "", mae = "", cpf = "", tel = "", estadoCivil = "", cidade = "";
+        let nomesCandidatos = [];
+        const regexUF = /\s(AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO)$/i;
+
+        linhas.forEach(linha => {
+            const limpa = linha.toLowerCase();
+            const cpfMatch = linha.match(/\d{3}\.?\d{3}\.?\d{3}-?\d{2}/g);
+            if (cpfMatch) {
+                cpfMatch.forEach(m => {
+                    if (m.replace(/\D/g, "").length === 11 && (limpa.includes("cpf") || !cpf)) cpf = m;
+                });
+            }
+            if (limpa.includes("cidade:")) {
+                cidade = linha.split(/cidade:/i)[1].replace(/[:✅]/g, "").trim();
+            } else if (linha.includes("/")) {
+                const partes = linha.split("/");
+                if(partes[1] && partes[1].trim().length === 2) cidade = partes[0].replace(/[:✅]/g, "").trim();
+            } else if (regexUF.test(linha) && !limpa.includes("rua") && !limpa.includes("bairro")) {
+                cidade = linha.replace(regexUF, "").trim();
+            }
+        });
+
+        const ruidos = ["faculdade", "unifahe", "requerimento", "naturalidade", "órgão", "expedidor", "cidade", "estado", "email", "e-mail", "rua", "bairro", "cep", "nascimento", "polo", "central", "tel"];
+
+        linhas.forEach((linha) => {
+            const limpa = linha.toLowerCase();
+            const valorPuro = linha.replace(/Nome completo|Nome da mãe|Nome|Aluno|Mãe/gi, "").replace(/[:✅]/g, "").trim();
+
+            const regexCivil = /(solteiro|solteira|casado|casada|divorciado|divorciada|viúvo|viúva|união)/i;
+            if (regexCivil.test(linha) && !estadoCivil) estadoCivil = linha.match(regexCivil)[0];
+
+            const regexTel = /(?:\(?\d{2}\)?\s?)?(?:9\s?)?\d{4,5}[-\s]?\s?\d{4}/;
+            if (regexTel.test(linha)) {
+                let m = linha.match(regexTel)[0];
+                if (m.replace(/\D/g, "").length >= 10 && m.replace(/\D/g, "") !== (cpf || "").replace(/\D/g, "")) tel = m;
+            }
+
+            const eRuido = ruidos.some(r => limpa.includes(r));
+            const eCidade = cidade && (limpa.includes(cidade.toLowerCase()) || regexUF.test(linha));
+            const temMuitosNumeros = (linha.replace(/\D/g, "").length > 6);
+            
+            if (!eRuido && !eCidade && !temMuitosNumeros && !valorPuro.includes("@") && valorPuro.split(" ").length >= 2) {
+                if (limpa.includes("mãe") || limpa.includes("mae")) {
+                    mae = valorPuro;
+                } else {
+                    nomesCandidatos.push(valorPuro);
+                }
+            }
+        });
+
+        aluno = nomesCandidatos[0] || "";
+        if (!mae) mae = nomesCandidatos[1] || "";
+
+        let foneFinal = (tel || "").replace(/\D/g, "");
+        if (foneFinal.startsWith("55") && foneFinal.length > 11) foneFinal = foneFinal.substring(2);
+        if (foneFinal.length >= 10) {
+            const ddd = foneFinal.substring(0, 2);
+            const resto = foneFinal.substring(2);
+            tel = `(${ddd}) ${resto.length === 9 ? resto.substring(0, 5) : resto.substring(0, 4)}-${resto.substring(resto.length-4)}`;
+        }
+
+        const template = `ℹ REQUERIMENTO COM PRÉ-MATRÍCULA
+Nome Completo: ${aluno.toUpperCase()}
+CPF: ${cpf}
+Nome da Mãe: ${mae.toUpperCase()}
+Estado Civil: ${estadoCivil ? estadoCivil.charAt(0).toUpperCase() + estadoCivil.slice(1) : ""}
+Tel/Cel: ${tel}
+Cidade: ${cidade.toUpperCase()}
+Origem da Venda: ${document.getElementById('origem').value}
+
+📚 Tipo de Curso:
+${["Graduação", "Tecnólogo", "Pós-graduação", "2ª Licenciatura", "R2", "Aperfeiçoamento", "Extensão", "2ª Graduação"].map(t => document.getElementById('tipo').value === t ? `(X) ${t}` : `( ) ${t}`).join('\n')}
+
+Curso: ${document.getElementById('curso').value.toUpperCase()}
+Brinde: ${document.getElementById('brinde').value}
+
+( ) PENDENTE
+( ) NÃO QUIS
+
+Carga Horária: ${document.getElementById('carga').value}
+💰 FINANCEIRO:
+( ${document.getElementById('financeiro').value === 'Boleto' ? 'X' : ' '} ) Boleto
+( ${document.getElementById('financeiro').value === 'Cartão' ? 'X' : ' '} ) Cartão
+( ${document.getElementById('financeiro').value === 'Quitado' ? 'X' : ' '} ) Quitado (valor à vista)
+
+• Valor: R$ ${document.getElementById('valor').value}
+• Vencimento: ${document.getElementById('vencimento').value}
+
+Polo: Unidade Central
+Vendedor: ${document.getElementById('vendedor').value}`;
+
+        document.getElementById('output').innerText = template;
+    }
+
+    function copiar() {
+        const t = document.getElementById('output').innerText;
+        navigator.clipboard.writeText(t).then(() => {
+            const b = document.querySelector('.copy-btn');
+            b.innerHTML = '<i class="fa-solid fa-check"></i> COPIADO!';
+            setTimeout(() => { b.innerHTML = '<i class="fa-solid fa-copy"></i> COPIAR TEXTO'; }, 2000);
+        });
+    }
+</script>
+</body>
+</html>
+

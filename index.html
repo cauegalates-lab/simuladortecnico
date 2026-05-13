@@ -19,9 +19,17 @@
       --texto: #142033;
       --muted: #65748b;
       --linha: #d9e3f2;
-      --verde: #0c7f5b;
+      --verde: #087a56;
+      --verde-bg: #e5f7ef;
       --vermelho: #b42318;
-      --sombra: 0 18px 45px rgba(18, 63, 130, 0.12);
+      --vermelho-bg: #fff0f0;
+      --amarelo-bg: #fff8e6;
+      --sombra: 0 14px 34px rgba(18, 63, 130, 0.11);
+    }
+
+    html,
+    body {
+      height: 100%;
     }
 
     body {
@@ -29,50 +37,70 @@
       font-family: Arial, Helvetica, sans-serif;
       background: var(--fundo);
       color: var(--texto);
+      overflow: hidden;
     }
 
     .app {
-      width: min(1120px, calc(100% - 28px));
+      width: min(1380px, calc(100vw - 20px));
+      height: 100vh;
       margin: 0 auto;
-      padding: 22px 0;
+      padding: 10px 0;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
     }
 
     .topo {
       background: linear-gradient(135deg, var(--azul), var(--azul-escuro));
       color: #ffffff;
-      border-radius: 20px;
-      padding: 22px 26px;
-      margin-bottom: 18px;
+      border-radius: 18px;
+      padding: 14px 20px;
       box-shadow: var(--sombra);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
     }
 
     .topo h1 {
-      margin: 0 0 6px;
-      font-size: 27px;
-      letter-spacing: -0.4px;
+      margin: 0 0 4px;
+      font-size: 24px;
+      letter-spacing: -0.3px;
     }
 
     .topo p {
       margin: 0;
-      font-size: 14px;
-      color: rgba(255, 255, 255, 0.84);
-      line-height: 1.45;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.86);
+      line-height: 1.35;
+    }
+
+    .topo .mini {
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 9px 12px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .grid {
+      min-height: 0;
       display: grid;
-      grid-template-columns: 420px 1fr;
-      gap: 18px;
-      align-items: stretch;
+      grid-template-columns: minmax(430px, 0.92fr) minmax(560px, 1.08fr);
+      gap: 10px;
     }
 
     .card {
+      min-height: 0;
       background: var(--card);
       border: 1px solid var(--linha);
-      border-radius: 20px;
+      border-radius: 18px;
       box-shadow: var(--sombra);
-      padding: 18px;
-      min-height: 660px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
     }
 
     .card-head {
@@ -80,19 +108,20 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
+      flex: 0 0 auto;
     }
 
     .card-head h2 {
       margin: 0;
-      font-size: 19px;
+      font-size: 18px;
     }
 
     .tag {
       display: inline-flex;
       align-items: center;
       border-radius: 999px;
-      padding: 7px 10px;
+      padding: 6px 10px;
       background: var(--azul-claro);
       color: var(--azul);
       font-size: 12px;
@@ -100,16 +129,24 @@
       white-space: nowrap;
     }
 
+    .input-grid {
+      min-height: 0;
+      display: grid;
+      grid-template-rows: 230px auto auto 1fr;
+      gap: 10px;
+      flex: 1;
+    }
+
     .paste-box {
-      min-height: 310px;
+      min-height: 0;
       border: 2px dashed #9fb5d8;
-      border-radius: 18px;
+      border-radius: 16px;
       background: #f8fbff;
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 18px;
+      padding: 14px;
       overflow: hidden;
       cursor: pointer;
       transition: 0.2s ease;
@@ -123,50 +160,70 @@
 
     .paste-box img {
       max-width: 100%;
-      max-height: 278px;
-      border-radius: 14px;
+      max-height: 205px;
+      border-radius: 12px;
       box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
     }
 
     .paste-icon {
-      width: 58px;
-      height: 58px;
-      border-radius: 18px;
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
       background: #e4efff;
       display: grid;
       place-items: center;
-      font-size: 28px;
-      margin: 0 auto 12px;
+      font-size: 26px;
+      margin: 0 auto 10px;
     }
 
     .paste-box strong {
       display: block;
-      font-size: 17px;
-      margin-bottom: 6px;
+      font-size: 16px;
+      margin-bottom: 5px;
     }
 
     .paste-box span {
       display: block;
       color: var(--muted);
       font-size: 13px;
-      line-height: 1.45;
+      line-height: 1.4;
     }
 
     input[type="file"] {
       display: none;
     }
 
+    textarea {
+      width: 100%;
+      height: 100%;
+      min-height: 170px;
+      border: 1px solid var(--linha);
+      border-radius: 15px;
+      padding: 12px;
+      font: inherit;
+      resize: none;
+      outline: none;
+      color: var(--texto);
+      line-height: 1.42;
+      background: #ffffff;
+    }
+
+    textarea:focus {
+      border-color: var(--azul);
+      box-shadow: 0 0 0 4px rgba(18, 63, 130, 0.10);
+    }
+
     .acoes {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 12px;
+      gap: 8px;
+      flex: 0 0 auto;
     }
 
     button {
       border: 0;
       border-radius: 13px;
-      padding: 12px 14px;
+      padding: 11px 12px;
       font: inherit;
       font-weight: 700;
       cursor: pointer;
@@ -189,24 +246,23 @@
     }
 
     .btn-verde {
-      background: #e7f8f1;
+      background: var(--verde-bg);
       color: var(--verde);
     }
 
     .btn-limpar {
-      background: #fff0f0;
+      background: var(--vermelho-bg);
       color: var(--vermelho);
     }
 
     .status {
-      margin-top: 12px;
-      padding: 12px;
+      padding: 10px 11px;
       border: 1px solid var(--linha);
       border-radius: 14px;
       background: #f8fbff;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.45;
+      font-size: 12.5px;
+      line-height: 1.35;
     }
 
     .barra {
@@ -215,7 +271,7 @@
       background: #dfe8f7;
       border-radius: 999px;
       overflow: hidden;
-      margin-top: 10px;
+      margin-top: -2px;
     }
 
     .barra span {
@@ -226,94 +282,136 @@
       transition: width 0.2s ease;
     }
 
-    textarea {
-      width: 100%;
-      min-height: 150px;
-      margin-top: 12px;
-      border: 1px solid var(--linha);
-      border-radius: 15px;
-      padding: 12px;
-      font: inherit;
-      resize: vertical;
-      outline: none;
-      color: var(--texto);
-    }
-
-    textarea:focus {
-      border-color: var(--azul);
-      box-shadow: 0 0 0 4px rgba(18, 63, 130, 0.10);
-    }
-
     .resumo {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 14px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+      flex: 0 0 auto;
     }
 
     .resumo-item {
       border: 1px solid var(--linha);
-      border-radius: 16px;
+      border-radius: 15px;
       background: #f8fbff;
-      padding: 13px;
+      padding: 10px;
     }
 
     .resumo-item span {
       display: block;
       color: var(--muted);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
-      margin-bottom: 5px;
+      margin-bottom: 4px;
     }
 
     .resumo-item strong {
       display: block;
       color: var(--azul);
-      font-size: 22px;
+      font-size: 20px;
+      line-height: 1.05;
+    }
+
+    .resultado-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex: 0 0 auto;
     }
 
     .lista {
-      display: grid;
-      gap: 10px;
-      max-height: 520px;
+      min-height: 0;
       overflow: auto;
-      padding-right: 4px;
+      padding-right: 3px;
+      display: grid;
+      gap: 8px;
+      align-content: start;
+      flex: 1;
+    }
+
+    .mensagem-fixa {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      border: 1px solid #cfe0f7;
+      border-radius: 15px;
+      background: #f7fbff;
+      color: var(--azul);
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+      padding: 12px 13px;
+      box-shadow: 0 8px 16px rgba(18, 63, 130, 0.05);
+    }
+
+    .linhas-resultado {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
     }
 
     .curso {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
+      min-width: 0;
       border: 1px solid var(--linha);
-      border-radius: 16px;
+      border-radius: 15px;
       background: #ffffff;
-      padding: 14px;
+      padding: 11px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .curso.disponivel {
+      border-color: rgba(8, 122, 86, 0.34);
+      background: #fbfffd;
+    }
+
+    .curso.indisponivel {
+      border-color: rgba(180, 35, 24, 0.22);
+      background: #fffdfd;
     }
 
     .curso h3 {
       margin: 0;
-      font-size: 16px;
-      line-height: 1.3;
+      font-size: 14.5px;
+      line-height: 1.26;
+      word-break: break-word;
     }
 
-    .curso button {
-      padding: 9px 11px;
-      font-size: 12px;
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 11.5px;
+      font-weight: 800;
       white-space: nowrap;
     }
 
+    .badge.ok {
+      color: var(--verde);
+      background: var(--verde-bg);
+    }
+
+    .badge.no {
+      color: var(--vermelho);
+      background: var(--vermelho-bg);
+    }
+
     .vazio {
-      min-height: 420px;
+      min-height: 310px;
       display: grid;
       place-items: center;
       text-align: center;
       color: var(--muted);
       border: 1px dashed #b8c8e1;
-      border-radius: 18px;
+      border-radius: 16px;
       background: #fbfdff;
-      padding: 28px;
-      line-height: 1.5;
+      padding: 24px;
+      line-height: 1.45;
     }
 
     .toast {
@@ -330,7 +428,15 @@
       box-shadow: var(--sombra);
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 1050px) {
+      body {
+        overflow: auto;
+      }
+
+      .app {
+        height: auto;
+      }
+
       .grid {
         grid-template-columns: 1fr;
       }
@@ -338,33 +444,35 @@
       .card {
         min-height: auto;
       }
+
+      .input-grid {
+        grid-template-rows: 230px auto auto 240px;
+      }
+
+      .lista {
+        max-height: 620px;
+      }
     }
 
-    @media (max-width: 560px) {
-      .app {
-        width: calc(100% - 18px);
-        padding: 12px 0;
-      }
-
+    @media (max-width: 650px) {
       .topo {
-        padding: 18px;
+        flex-direction: column;
+        align-items: flex-start;
       }
 
-      .topo h1 {
-        font-size: 23px;
-      }
-
+      .grid,
+      .resumo,
       .acoes,
-      .resumo {
+      .resultado-top,
+      .linhas-resultado {
         grid-template-columns: 1fr;
       }
 
       .curso {
-        align-items: flex-start;
-        flex-direction: column;
+        grid-template-columns: 1fr;
       }
 
-      .curso button {
+      button {
         width: 100%;
       }
     }
@@ -373,68 +481,79 @@
 <body>
   <div class="app">
     <header class="topo">
-      <h1>Simulador de Cursos Tecnólogos</h1>
-      <p>Cole o print à esquerda. O sistema lê a imagem e mostra à direita somente os nomes dos cursos que constam no PDF de Tecnólogos.</p>
+      <div>
+        <h1>Simulador de Cursos Tecnólogos</h1>
+        <p>Cole um print ou cole uma lista/tabela de cursos. O sistema limpa o texto, remove valores, carga horária e botão “Matricule-se”, e verifica se o curso consta no PDF de referência.</p>
+      </div>
+      <div class="mini">PDF de referência: Tecnólogos</div>
     </header>
 
     <main class="grid">
       <section class="card">
         <div class="card-head">
           <h2>Print ou texto</h2>
-          <span class="tag">Ctrl + V</span>
+          <span class="tag">Ctrl + V ou texto</span>
         </div>
 
-        <label class="paste-box" id="areaPrint" for="arquivoPrint">
-          <div id="placeholderPrint">
-            <div class="paste-icon">📋</div>
-            <strong>Cole o print aqui</strong>
-            <span>Clique neste quadro e aperte Ctrl + V<br>ou selecione a imagem no computador.</span>
+        <div class="input-grid">
+          <label class="paste-box" id="areaPrint" for="arquivoPrint">
+            <div id="placeholderPrint">
+              <div class="paste-icon">📋</div>
+              <strong>Cole o print aqui</strong>
+              <span>Clique neste quadro e aperte Ctrl + V<br>ou selecione a imagem no computador.</span>
+            </div>
+            <img id="previewPrint" alt="Prévia do print" style="display:none" />
+          </label>
+
+          <input id="arquivoPrint" type="file" accept="image/*" />
+
+          <div class="acoes">
+            <button class="btn-principal" onclick="verificarEntrada()">Verificar</button>
+            <button class="btn-limpar" onclick="limparTudo()">Limpar</button>
           </div>
-          <img id="previewPrint" alt="Prévia do print" style="display:none" />
-        </label>
 
-        <input id="arquivoPrint" type="file" accept="image/*" />
+          <div>
+            <div class="barra" id="barra"><span></span></div>
+            <div class="status" id="status">Aguardando print ou texto. Para texto, cole a lista abaixo e clique em Verificar.</div>
+          </div>
 
-        <div class="acoes">
-          <button class="btn-principal" onclick="lerPrint()">Ler print</button>
-          <button class="btn-limpar" onclick="limparTudo()">Limpar</button>
+          <textarea id="textoLido" placeholder="Cole aqui os cursos em texto. Pode vir assim:&#10;Tecnologia em Gestão de Varejo    4 Trimestres    1240 horas    14    1+12x de R$ 140,35&#10;Matricule-se&#10;&#10;O sistema vai limpar e verificar apenas o nome do curso."></textarea>
         </div>
-
-        <div class="barra" id="barra"><span></span></div>
-        <div class="status" id="status">Aguardando print. Também é possível colar os nomes dos cursos no campo abaixo.</div>
-
-        <textarea id="textoLido" placeholder="Opcional: cole aqui o texto do print ou os nomes dos cursos. Depois clique em Ler print."></textarea>
       </section>
 
       <section class="card">
         <div class="card-head">
-          <h2>Cursos que constam no PDF</h2>
-          <span class="tag">Somente nomes</span>
+          <h2>Resultado da verificação</h2>
+          <span class="tag">Somente nome limpo</span>
         </div>
 
         <div class="resumo">
           <div class="resumo-item">
-            <span>Encontrados</span>
-            <strong id="qtdEncontrados">0</strong>
+            <span>Verificados</span>
+            <strong id="qtdVerificados">0</strong>
+          </div>
+          <div class="resumo-item">
+            <span>Possui</span>
+            <strong id="qtdPossui">0</strong>
+          </div>
+          <div class="resumo-item">
+            <span>Não possui</span>
+            <strong id="qtdNaoPossui">0</strong>
           </div>
           <div class="resumo-item">
             <span>Base PDF</span>
             <strong id="qtdBase">0</strong>
           </div>
-          <div class="resumo-item">
-            <span>Modalidade</span>
-            <strong style="font-size:16px">Tecnólogos</strong>
-          </div>
         </div>
 
-        <div class="acoes" style="margin-bottom:14px">
-          <button class="btn-verde" onclick="copiarTodos()">Copiar nomes</button>
+        <div class="resultado-top">
+          <button class="btn-verde" onclick="copiarDisponiveis()">Copiar disponíveis</button>
           <button class="btn-secundario" onclick="mostrarTodos()">Ver todos do PDF</button>
         </div>
 
         <div id="resultados" class="lista">
           <div class="mensagem-fixa">Essas são as opções de graduação com conclusão mais rápida para você:</div>
-          <div class="vazio">Nenhum curso encontrado ainda.<br>Cole um print ou texto para verificar na base do PDF.</div>
+          <div class="vazio">Nenhum curso verificado ainda.<br>Cole um print ou texto para comparar com a base do PDF.</div>
         </div>
       </section>
     </main>
@@ -500,10 +619,10 @@
       'Negócios Sustentáveis e ESG',
       'Produção de Conteúdos Digitais',
       'Segurança no Trânsito',
-      'Segurança Pública (Obrigatório Carteirinha Funcional)',
+      'Segurança Pública',
       'Serviços Jurídicos',
       'Serviços Jurídicos e Notariais',
-      'Serviços Penais (Obrigatório Carteirinha Funcional)',
+      'Serviços Penais',
       'Tradutor e Intérprete - Português-Francês',
       'Serviços Previdenciários',
       'Perícia Judicial e Extrajudicial',
@@ -519,25 +638,24 @@
       'Internet das Coisas': ['iot'],
       'Inteligência Artificial': ['ia'],
       'Gestão de Recursos Humanos': ['recursos humanos', 'rh'],
-      'Segurança Pública (Obrigatório Carteirinha Funcional)': ['seguranca publica'],
-      'Serviços Penais (Obrigatório Carteirinha Funcional)': ['servicos penais'],
+      'Segurança Pública': ['seguranca publica obrigatorio carteirinha funcional'],
+      'Serviços Penais': ['servicos penais obrigatorio carteirinha funcional'],
       'Tradutor e Intérprete - Português-Francês': ['tradutor e interprete portugues frances', 'portugues frances', 'português-francês'],
       'Perícia Judicial e Extrajudicial': ['pericia judicial e extrajudicial'],
       'Mídias Sociais e Digitais': ['midias sociais e digitais'],
       'Negócios Sustentáveis e ESG': ['negocios sustentaveis e esg']
     };
 
-    const stopwords = new Set([
-      'de', 'da', 'do', 'das', 'dos', 'e', 'em', 'no', 'na', 'para', 'com',
-      'curso', 'cursos', 'tecnologo', 'tecnologos', 'tecnologia', 'gestao',
-      'servico', 'servicos', 'obrigatorio', 'carteirinha', 'funcional'
-    ]);
+    const baseIndex = cursosPDF.map(nome => ({
+      nome,
+      normal: normalizar(nome),
+      termos: [normalizar(nome), ...(aliases[nome] || []).map(normalizar)]
+    }));
 
     let imagemAtual = null;
     let resultadosAtuais = [];
 
     const $ = (id) => document.getElementById(id);
-
     $('qtdBase').textContent = cursosPDF.length;
 
     $('arquivoPrint').addEventListener('change', (event) => {
@@ -560,9 +678,7 @@
       $('areaPrint').classList.add('active');
     });
 
-    $('areaPrint').addEventListener('dragleave', () => {
-      $('areaPrint').classList.remove('active');
-    });
+    $('areaPrint').addEventListener('dragleave', () => $('areaPrint').classList.remove('active'));
 
     $('areaPrint').addEventListener('drop', (event) => {
       event.preventDefault();
@@ -576,10 +692,10 @@
       $('previewPrint').src = URL.createObjectURL(arquivo);
       $('previewPrint').style.display = 'block';
       $('placeholderPrint').style.display = 'none';
-      $('status').textContent = 'Print carregado. Clique em Ler print para verificar os cursos no PDF.';
+      $('status').textContent = 'Print carregado. Clique em Verificar para fazer a leitura.';
     }
 
-    async function lerPrint() {
+    async function verificarEntrada() {
       const textoManual = $('textoLido').value.trim();
 
       if (textoManual) {
@@ -588,7 +704,7 @@
       }
 
       if (!imagemAtual) {
-        alert('Cole ou envie um print primeiro.');
+        alert('Cole um texto ou envie um print primeiro.');
         return;
       }
 
@@ -624,146 +740,247 @@
     }
 
     function verificarCursos(textoOriginal) {
-      const texto = normalizar(textoOriginal);
-      const linhas = obterLinhas(textoOriginal);
-      const encontrados = [];
+      const candidatos = extrairCandidatos(textoOriginal);
+      let resultados = [];
 
-      cursosPDF.forEach((nome) => {
-        const resultado = correspondeCurso(nome, texto, linhas);
-        if (resultado.encontrado) {
-          encontrados.push({ nome, score: resultado.score, linhaExata: resultado.linhaExata });
+      if (candidatos.length) {
+        resultados = candidatos.map(candidato => {
+          const encontrado = encontrarNaBase(candidato.nomeLimpo);
+          return {
+            entrada: candidato.original,
+            nomeLimpo: encontrado ? encontrado.nome : candidato.nomeLimpo,
+            possui: Boolean(encontrado)
+          };
+        });
+      } else {
+        resultados = detectarCursosNoTextoLivre(textoOriginal);
+      }
+
+      resultadosAtuais = removerDuplicadosResultado(resultados);
+      renderizarResultados(resultadosAtuais);
+      atualizarResumo(resultadosAtuais);
+
+      const possui = resultadosAtuais.filter(item => item.possui).length;
+      const naoPossui = resultadosAtuais.filter(item => !item.possui).length;
+
+      $('status').textContent = resultadosAtuais.length
+        ? `Pronto. ${resultadosAtuais.length} curso(s) verificado(s): ${possui} possui e ${naoPossui} não possui no PDF.`
+        : 'Nenhum nome de curso foi identificado para verificar.';
+    }
+
+    function extrairCandidatos(texto) {
+      const linhas = String(texto || '')
+        .split(/\r?\n/)
+        .map(linha => linha.trim())
+        .filter(Boolean);
+
+      const candidatos = [];
+
+      linhas.forEach(linha => {
+        if (ehLinhaIgnorada(linha)) return;
+
+        const nomeLimpo = limparNomeCurso(linha);
+        if (!nomeLimpo || ehLinhaIgnorada(nomeLimpo)) return;
+
+        if (nomeLimpo.length < 3) return;
+        if (!/[a-zA-ZÀ-ÿ]/.test(nomeLimpo)) return;
+        if (/^(r\$|\d|x\s*de)/i.test(nomeLimpo)) return;
+
+        candidatos.push({
+          original: linha,
+          nomeLimpo
+        });
+      });
+
+      return candidatos;
+    }
+
+    function limparNomeCurso(texto) {
+      let valor = String(texto || '')
+        .replace(/\t+/g, ' ')
+        .replace(/\s{2,}/g, ' ')
+        .trim();
+
+      valor = valor.replace(/^[•\-*0-9.)\s]+/, '').trim();
+
+      valor = valor
+        .replace(/matricule-se/gi, ' ')
+        .replace(/\b\d+\s*trimestres?.*$/i, '')
+        .replace(/\b\d+\s*semestres?.*$/i, '')
+        .replace(/\b\d+\s*meses?.*$/i, '')
+        .replace(/\b\d+\s*horas?.*$/i, '')
+        .replace(/\b\d+\s*h\b.*$/i, '')
+        .replace(/\b1\s*\+\s*\d+\s*x?.*$/i, '')
+        .replace(/\b\d+\s*x\s*de\s*r\$.*$/i, '')
+        .replace(/\br\$.*$/i, '')
+        .replace(/\b\d{2,}\b.*$/i, '')
+        .trim();
+
+      valor = valor
+        .replace(/^curso\s+superior\s+de\s+tecnologia\s+(em|de)\s+/i, '')
+        .replace(/^tecnologia\s+(em|de)\s+/i, '')
+        .replace(/^tecn[oó]logo\s+(em|de)\s+/i, '')
+        .replace(/^gradua[cç][aã]o\s+(em|de)\s+/i, '')
+        .replace(/^curso\s+(de|em)\s+/i, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      valor = valor.replace(/[.,;:]+$/g, '').trim();
+
+      return capitalizarConhecido(valor);
+    }
+
+    function capitalizarConhecido(valor) {
+      const encontrado = encontrarNaBase(valor);
+      if (encontrado) return encontrado.nome;
+
+      return valor
+        .split(' ')
+        .map((palavra, index) => {
+          const minusculas = ['de', 'da', 'do', 'das', 'dos', 'e', 'em', 'no', 'na', 'para'];
+          const lower = palavra.toLowerCase();
+          if (index > 0 && minusculas.includes(lower)) return lower;
+          if (lower === 'rh') return 'RH';
+          if (lower === 'esg') return 'ESG';
+          return palavra.charAt(0).toUpperCase() + palavra.slice(1).toLowerCase();
+        })
+        .join(' ');
+    }
+
+    function encontrarNaBase(nome) {
+      const normal = normalizar(limparPrefixoTecnologia(nome));
+      if (!normal) return null;
+
+      let exato = baseIndex.find(item => item.termos.some(termo => termo === normal));
+      if (exato) return exato;
+
+      exato = baseIndex.find(item => item.termos.some(termo => normal.includes(termo) || termo.includes(normal)));
+      if (exato && normal.length >= 8) return exato;
+
+      const palavrasEntrada = palavrasChave(normal);
+      if (!palavrasEntrada.length) return null;
+
+      let melhor = null;
+      let melhorScore = 0;
+
+      baseIndex.forEach(item => {
+        const palavrasBase = palavrasChave(item.normal);
+        if (!palavrasBase.length) return;
+
+        const acertos = palavrasBase.filter(p => palavrasEntrada.includes(p)).length;
+        const score = Math.round((acertos / palavrasBase.length) * 100);
+
+        if (score > melhorScore) {
+          melhorScore = score;
+          melhor = item;
         }
       });
 
-      const limpos = removerFalsosPositivos(encontrados);
-      resultadosAtuais = limpos
-        .sort((a, b) => b.score - a.score || a.nome.localeCompare(b.nome, 'pt-BR'))
-        .map(item => item.nome);
-
-      renderizarResultados(resultadosAtuais);
-      $('qtdEncontrados').textContent = resultadosAtuais.length;
-      $('status').textContent = resultadosAtuais.length
-        ? `Pronto. ${resultadosAtuais.length} curso(s) encontrado(s) no PDF.`
-        : 'Nenhum curso do print foi encontrado no PDF de Tecnólogos.';
+      return melhorScore >= 86 ? melhor : null;
     }
 
-    function correspondeCurso(nome, texto, linhas) {
-      const nomeNormal = normalizar(nome);
-      const termos = [nome, ...(aliases[nome] || [])].map(normalizar).filter(Boolean);
-
-      const linhaExata = linhas.some(linha => termos.some(termo => linha === termo || linha.endsWith(' ' + termo)));
-      if (linhaExata) {
-        return { encontrado: true, score: 100, linhaExata: true };
-      }
-
-      const fraseCompleta = termos.some(termo => termo.length > 5 && contemFrase(texto, termo));
-      if (fraseCompleta && !ehNomeCurtoAmbiguo(nomeNormal)) {
-        return { encontrado: true, score: 96, linhaExata: false };
-      }
-
-      const palavras = palavrasChave(nomeNormal);
-      if (!palavras.length) {
-        return { encontrado: false, score: 0, linhaExata: false };
-      }
-
-      const acertos = palavras.filter(palavra => contemPalavra(texto, palavra)).length;
-      const score = Math.round((acertos / palavras.length) * 100);
-
-      return {
-        encontrado: score >= 86,
-        score,
-        linhaExata: false
-      };
+    function detectarCursosNoTextoLivre(textoOriginal) {
+      const texto = normalizar(textoOriginal);
+      return baseIndex
+        .filter(item => item.termos.some(termo => termo && contemFrase(texto, termo)))
+        .map(item => ({
+          entrada: item.nome,
+          nomeLimpo: item.nome,
+          possui: true
+        }));
     }
 
-    function removerFalsosPositivos(lista) {
-      const porNome = new Map();
-      lista.forEach(item => porNome.set(item.nome, item));
-      const unicos = [...porNome.values()];
-      const normais = unicos.map(item => ({ ...item, normal: normalizar(item.nome) }));
+    function removerDuplicadosResultado(lista) {
+      const mapa = new Map();
 
-      return normais.filter(item => {
-        const nomeCurto = ehNomeCurtoAmbiguo(item.normal);
-        const existeMaior = normais.some(outro => outro.normal !== item.normal && outro.normal.includes(item.normal));
+      lista.forEach(item => {
+        const chave = normalizar(item.nomeLimpo);
+        if (!chave) return;
 
-        if (!nomeCurto && !existeMaior) return true;
-        if (item.linhaExata) return true;
-        if (!existeMaior) return true;
+        if (!mapa.has(chave)) {
+          mapa.set(chave, item);
+          return;
+        }
 
-        return false;
-      }).map(({ normal, ...item }) => item);
+        const atual = mapa.get(chave);
+        if (!atual.possui && item.possui) {
+          mapa.set(chave, item);
+        }
+      });
+
+      return [...mapa.values()];
     }
 
     function renderizarResultados(lista) {
       const mensagemFixa = '<div class="mensagem-fixa">Essas são as opções de graduação com conclusão mais rápida para você:</div>';
 
       if (!lista.length) {
-        $('resultados').innerHTML = mensagemFixa + '<div class="vazio">Nenhum curso encontrado.<br>Confira se o print está legível ou cole o texto manualmente.</div>';
+        $('resultados').innerHTML = mensagemFixa + '<div class="vazio">Nenhum curso verificado.<br>Cole um print ou texto para comparar com a base do PDF.</div>';
         return;
       }
 
-      $('resultados').innerHTML = mensagemFixa + lista.map((nome, index) => `
-        <article class="curso">
-          <h3>${escapeHTML(nome)}</h3>
-          <button class="btn-principal" onclick="copiarCurso(${index})">Copiar</button>
+      const cards = lista.map(item => `
+        <article class="curso ${item.possui ? 'disponivel' : 'indisponivel'}" data-possui="${item.possui ? 'sim' : 'nao'}">
+          <h3>${escapeHTML(item.nomeLimpo)}</h3>
+          <span class="badge ${item.possui ? 'ok' : 'no'}">${item.possui ? 'Possui' : 'Não possui'}</span>
         </article>
       `).join('');
+
+      $('resultados').innerHTML = mensagemFixa + `<div class="linhas-resultado">${cards}</div>`;
+    }
+
+    function atualizarResumo(lista) {
+      const possui = lista.filter(item => item.possui).length;
+      const naoPossui = lista.filter(item => !item.possui).length;
+
+      $('qtdVerificados').textContent = lista.length;
+      $('qtdPossui').textContent = possui;
+      $('qtdNaoPossui').textContent = naoPossui;
     }
 
     function mostrarTodos() {
-      resultadosAtuais = [...cursosPDF];
+      resultadosAtuais = cursosPDF.map(nome => ({
+        entrada: nome,
+        nomeLimpo: nome,
+        possui: true
+      }));
+
       renderizarResultados(resultadosAtuais);
-      $('qtdEncontrados').textContent = resultadosAtuais.length;
+      atualizarResumo(resultadosAtuais);
       $('status').textContent = 'Mostrando todos os cursos que constam na base do PDF.';
     }
 
-    function obterCursosDoLadoDireito() {
-      return [...document.querySelectorAll('#resultados .curso h3')]
+    function copiarDisponiveis() {
+      const disponiveis = [...document.querySelectorAll('#resultados .curso[data-possui="sim"] h3')]
         .map(item => item.textContent.trim())
         .filter(Boolean);
-    }
 
-    function copiarCurso(index) {
-      const cursosDoLadoDireito = obterCursosDoLadoDireito();
-      const curso = cursosDoLadoDireito[index];
-
-      if (!curso) {
-        alert('Nenhum curso para copiar.');
+      if (!disponiveis.length) {
+        alert('Nenhum curso disponível para copiar.');
         return;
       }
 
-      copiarTexto(montarMensagemCopia([curso]));
-    }
-
-    function copiarTodos() {
-      const cursosDoLadoDireito = obterCursosDoLadoDireito();
-
-      if (!cursosDoLadoDireito.length) {
-        alert('Nenhum curso para copiar.');
-        return;
-      }
-
-      copiarTexto(montarMensagemCopia(cursosDoLadoDireito));
-    }
-
-    function montarMensagemCopia(lista) {
-      return 'Essas são as opções de graduação com conclusão mais rápida para você:\n\n' +
-        lista.map(nome => `• ${nome}`).join('\n');
+      copiarTexto(
+        'Essas são as opções de graduação com conclusão mais rápida para você:\n\n' +
+        disponiveis.map(nome => `• ${nome}`).join('\n')
+      );
     }
 
     function limparTudo() {
       imagemAtual = null;
       resultadosAtuais = [];
+
       $('arquivoPrint').value = '';
       $('previewPrint').src = '';
       $('previewPrint').style.display = 'none';
       $('placeholderPrint').style.display = 'block';
       $('textoLido').value = '';
-      $('qtdEncontrados').textContent = '0';
       $('barra').style.display = 'none';
       $('barra').querySelector('span').style.width = '0%';
-      $('status').textContent = 'Aguardando print. Também é possível colar os nomes dos cursos no campo abaixo.';
-      $('resultados').innerHTML = '<div class="mensagem-fixa">Essas são as opções de graduação com conclusão mais rápida para você:</div><div class="vazio">Nenhum curso encontrado ainda.<br>Cole um print ou texto para verificar na base do PDF.</div>';
+      $('status').textContent = 'Aguardando print ou texto. Para texto, cole a lista abaixo e clique em Verificar.';
+
+      atualizarResumo([]);
+      renderizarResultados([]);
     }
 
     async function copiarTexto(texto) {
@@ -777,6 +994,7 @@
         document.execCommand('copy');
         temporario.remove();
       }
+
       toast('Copiado!');
     }
 
@@ -787,31 +1005,41 @@
       window.toastTimer = setTimeout(() => $('toast').style.display = 'none', 1600);
     }
 
-    function obterLinhas(texto) {
-      return String(texto || '')
-        .split(/\r?\n/)
-        .map(linha => normalizar(linha).replace(/^[\s•\-*0-9.)]+/, '').trim())
-        .filter(Boolean);
+    function ehLinhaIgnorada(linha) {
+      const l = normalizar(linha);
+      if (!l) return true;
+      if (l === 'matricule-se') return true;
+      if (/^r\s*\$/.test(l)) return true;
+      if (/^\d+$/.test(l)) return true;
+      if (/^\d+\s*(trimestres|semestres|meses|horas|h)$/.test(l)) return true;
+      if (/^1\s*\+\s*\d+/.test(l)) return true;
+      if (/^\d+\s*x\s*de/.test(l)) return true;
+      return false;
     }
 
-    function palavrasChave(nomeNormal) {
-      return nomeNormal
+    function limparPrefixoTecnologia(nome) {
+      return String(nome || '')
+        .replace(/^curso\s+superior\s+de\s+tecnologia\s+(em|de)\s+/i, '')
+        .replace(/^tecnologia\s+(em|de)\s+/i, '')
+        .replace(/^tecn[oó]logo\s+(em|de)\s+/i, '')
+        .trim();
+    }
+
+    function palavrasChave(textoNormal) {
+      const stopwords = new Set([
+        'de', 'da', 'do', 'das', 'dos', 'e', 'em', 'no', 'na', 'para', 'com',
+        'curso', 'cursos', 'tecnologo', 'tecnologos', 'tecnologia', 'superior',
+        'obrigatorio', 'carteirinha', 'funcional'
+      ]);
+
+      return String(textoNormal || '')
         .split(' ')
         .map(p => p.trim())
         .filter(p => p.length > 2 && !stopwords.has(p));
     }
 
-    function ehNomeCurtoAmbiguo(nomeNormal) {
-      return nomeNormal.split(' ').filter(Boolean).length <= 2;
-    }
-
     function contemFrase(texto, frase) {
       const escaped = frase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      return new RegExp(`(^|\\s)${escaped}(\\s|$)`, 'i').test(texto);
-    }
-
-    function contemPalavra(texto, palavra) {
-      const escaped = palavra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       return new RegExp(`(^|\\s)${escaped}(\\s|$)`, 'i').test(texto);
     }
 

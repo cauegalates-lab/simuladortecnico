@@ -373,11 +373,24 @@
       background: #fffdfd;
     }
 
+    .curso-info {
+      min-width: 0;
+      display: grid;
+      gap: 4px;
+    }
+
     .curso h3 {
       margin: 0;
       font-size: 14.5px;
       line-height: 1.26;
       word-break: break-word;
+    }
+
+    .trimestre {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.25;
     }
 
     .badge {
@@ -517,7 +530,7 @@
             <div class="status" id="status">Aguardando print ou texto. Para texto, cole a lista abaixo e clique em Verificar.</div>
           </div>
 
-          <textarea id="textoLido" placeholder="Cole aqui os cursos em texto. Pode vir assim:&#10;Tecnologia em Gestão de Varejo    4 Trimestres    1240 horas    14    1+12x de R$ 140,35&#10;Matricule-se&#10;&#10;O sistema vai limpar e verificar apenas o nome do curso."></textarea>
+          <textarea id="textoLido" placeholder="Cole aqui os cursos em texto. Pode vir assim:&#10;Tecnologia em Gestão de Varejo    4 Trimestres    1240 horas    14    1+12x de R$ 140,35&#10;Matricule-se&#10;&#10;O sistema vai limpar e verificar apenas o nome do curso, mantendo a quantidade de trimestres."></textarea>
         </div>
       </section>
 
@@ -746,9 +759,11 @@
       if (candidatos.length) {
         resultados = candidatos.map(candidato => {
           const encontrado = encontrarNaBase(candidato.nomeLimpo);
+          const nomeFinal = encontrado ? encontrado.nome : candidato.nomeLimpo;
           return {
             entrada: candidato.original,
-            nomeLimpo: encontrado ? encontrado.nome : candidato.nomeLimpo,
+            nomeLimpo: nomeFinal,
+            trimestres: candidato.trimestres || buscarTrimestresProximo(textoOriginal, nomeFinal),
             possui: Boolean(encontrado)
           };
         });
@@ -788,7 +803,8 @@
 
         candidatos.push({
           original: linha,
-          nomeLimpo
+          nomeLimpo,
+          trimestres: extrairTrimestres(linha)
         });
       });
 
@@ -886,6 +902,7 @@
         .map(item => ({
           entrada: item.nome,
           nomeLimpo: item.nome,
+          trimestres: buscarTrimestresProximo(textoOriginal, item.nome),
           possui: true
         }));
     }
@@ -903,8 +920,11 @@
         }
 
         const atual = mapa.get(chave);
+        if (!atual.trimestres && item.trimestres) {
+          atual.trimestres = item.trimestres;
+        }
         if (!atual.possui && item.possui) {
-          mapa.set(chave, item);
+          mapa.set(chave, { ...item, trimestres: item.trimestres || atual.trimestres });
         }
       });
 
@@ -919,12 +939,18 @@
         return;
       }
 
-      const cards = lista.map(item => `
-        <article class="curso ${item.possui ? 'disponivel' : 'indisponivel'}" data-possui="${item.possui ? 'sim' : 'nao'}">
-          <h3>${escapeHTML(item.nomeLimpo)}</h3>
-          <span class="badge ${item.possui ? 'ok' : 'no'}">${item.possui ? 'Possui' : 'Não possui'}</span>
-        </article>
-      `).join('');
+      const cards = lista.map(item => {
+        const trimestres = item.trimestres || 'Trimestres não identificados';
+        return `
+          <article class="curso ${item.possui ? 'disponivel' : 'indisponivel'}" data-possui="${item.possui ? 'sim' : 'nao'}" data-trimestres="${escapeHTML(item.trimestres || '')}">
+            <div class="curso-info">
+              <h3>${escapeHTML(item.nomeLimpo)}</h3>
+              <div class="trimestre">${escapeHTML(trimestres)}</div>
+            </div>
+            <span class="badge ${item.possui ? 'ok' : 'no'}">${item.possui ? 'Possui' : 'Não possui'}</span>
+          </article>
+        `;
+      }).join('');
 
       $('resultados').innerHTML = mensagemFixa + `<div class="linhas-resultado">${cards}</div>`;
     }
@@ -942,6 +968,7 @@
       resultadosAtuais = cursosPDF.map(nome => ({
         entrada: nome,
         nomeLimpo: nome,
+        trimestres: '',
         possui: true
       }));
 
@@ -951,8 +978,12 @@
     }
 
     function copiarDisponiveis() {
-      const disponiveis = [...document.querySelectorAll('#resultados .curso[data-possui="sim"] h3')]
-        .map(item => item.textContent.trim())
+      const disponiveis = [...document.querySelectorAll('#resultados .curso[data-possui="sim"]')]
+        .map(card => {
+          const nome = card.querySelector('h3')?.textContent.trim() || '';
+          const trimestres = card.getAttribute('data-trimestres') || '';
+          return nome ? { nome, trimestres } : null;
+        })
         .filter(Boolean);
 
       if (!disponiveis.length) {
@@ -962,7 +993,7 @@
 
       copiarTexto(
         'Essas são as opções de graduação com conclusão mais rápida para você:\n\n' +
-        disponiveis.map(nome => `• ${nome}`).join('\n')
+        disponiveis.map(item => `• ${item.nome}${item.trimestres ? ' — ' + item.trimestres : ''}`).join('\n')
       );
     }
 
@@ -1003,6 +1034,59 @@
       $('toast').style.display = 'block';
       clearTimeout(window.toastTimer);
       window.toastTimer = setTimeout(() => $('toast').style.display = 'none', 1600);
+    }
+
+    function extrairTrimestres(texto) {
+      const bruto = String(texto || '');
+      const direto = bruto.match(/(\d+)\s*trimestres?/i);
+      if (direto) {
+        const qtd = direto[1];
+        return `${qtd} ${qtd === '1' ? 'Trimestre' : 'Trimestres'}`;
+      }
+
+      const normal = normalizar(bruto);
+      const solto = normal.match(/(\d+)\s*trimestres?/i);
+      if (solto) {
+        const qtd = solto[1];
+        return `${qtd} ${qtd === '1' ? 'Trimestre' : 'Trimestres'}`;
+      }
+
+      return '';
+    }
+
+    function buscarTrimestresProximo(textoOriginal, nomeCurso) {
+      const linhas = String(textoOriginal || '')
+        .split(/\r?\n/)
+        .map(linha => linha.trim())
+        .filter(Boolean);
+
+      const nomeNormal = normalizar(limparPrefixoTecnologia(nomeCurso));
+      if (!nomeNormal) return '';
+
+      for (let i = 0; i < linhas.length; i++) {
+        const linhaNormal = normalizar(limparPrefixoTecnologia(linhas[i]));
+        const contemCurso = linhaNormal.includes(nomeNormal) || nomeNormal.includes(linhaNormal);
+        if (!contemCurso) continue;
+
+        const naLinha = extrairTrimestres(linhas[i]);
+        if (naLinha) return naLinha;
+
+        const proxima = extrairTrimestres(linhas[i + 1] || '');
+        if (proxima) return proxima;
+      }
+
+      const textoNormal = normalizar(textoOriginal);
+      const termosCurso = palavrasChave(nomeNormal).join('.*?');
+      if (termosCurso) {
+        const regex = new RegExp(`${termosCurso}.{0,80}?(\\d+)\\s*trimestres?`, 'i');
+        const achou = textoNormal.match(regex);
+        if (achou) {
+          const qtd = achou[1];
+          return `${qtd} ${qtd === '1' ? 'Trimestre' : 'Trimestres'}`;
+        }
+      }
+
+      return '';
     }
 
     function ehLinhaIgnorada(linha) {

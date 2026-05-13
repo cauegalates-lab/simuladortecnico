@@ -1,348 +1,839 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IA Matrícula Pro | Unidade Central</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/4712/4712139.png">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root { --p: #4f46e5; --s: #10b981; --danger: #ef4444; --orange: #f59e0b; --blue: #3b82f6; --teal: #0d9488; --dark: #0f172a; --gray: #f8fafc; }
-        * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: #f1f5f9; padding: 20px; display: flex; justify-content: center; flex-direction: column; align-items: center; }
-        .app { width: 100%; max-width: 1200px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .card { background: white; padding: 25px; border-radius: 24px; box-shadow: 0 10px 15px rgba(0,0,0,0.05); }
-        .header { grid-column: 1 / -1; text-align: center; padding: 20px; background: var(--dark); color: white; border-radius: 20px; margin-bottom: 10px; }
-        textarea { width: 100%; height: 230px; border: 2px solid #e2e8f0; border-radius: 16px; padding: 15px; font-size: 14px; background: var(--gray); resize: none; }
-        .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin: 10px 0; }
-        label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; margin-bottom: 5px; display: block; }
-        input, select { width: 100%; padding: 10px; border-radius: 10px; border: 1.5px solid #e2e8f0; font-size: 14px; background: white; }
-        .actions-group { margin-top: 20px; padding-top: 15px; border-top: 1px dashed #e2e8f0; }
-        .combo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0; }
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 12px; }
-        .btn-p { background: var(--p); color: white; font-size: 16px; padding: 18px; }
-        .btn-p:hover { background: #4338ca; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(79, 70, 229, 0.4); }
-        .btn-combo-ef12 { background: var(--orange); color: white; }
-        .btn-combo-ef4 { background: var(--teal); color: white; }
-        .btn-clear { background: #f1f5f9; color: #64748b; margin-top: 10px; }
-        .btn-clear:hover { background: var(--danger); color: white; }
-        .result { background: var(--dark); color: #e2e8f0; padding: 25px; border-radius: 20px; font-family: 'Courier New', monospace; white-space: pre-wrap; font-size: 13px; min-height: 600px; }
-        .copy-btn { background: var(--s); color: white; margin-top: 15px; }
-        footer { margin-top: 30px; color: #64748b; font-size: 13px; text-align: center; border-top: 1px solid #e2e8f0; padding-top: 20px; width: 100%; max-width: 400px; }
-        .dev-tag { font-weight: 700; color: var(--p); }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simulador de Cursos Tecnólogos</title>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --azul: #123f82;
+      --azul-escuro: #0b2d61;
+      --azul-claro: #eaf2ff;
+      --fundo: #eef3fb;
+      --card: #ffffff;
+      --texto: #142033;
+      --muted: #65748b;
+      --linha: #d9e3f2;
+      --verde: #0c7f5b;
+      --vermelho: #b42318;
+      --sombra: 0 18px 45px rgba(18, 63, 130, 0.12);
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--fundo);
+      color: var(--texto);
+    }
+
+    .app {
+      width: min(1120px, calc(100% - 28px));
+      margin: 0 auto;
+      padding: 22px 0;
+    }
+
+    .topo {
+      background: linear-gradient(135deg, var(--azul), var(--azul-escuro));
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 22px 26px;
+      margin-bottom: 18px;
+      box-shadow: var(--sombra);
+    }
+
+    .topo h1 {
+      margin: 0 0 6px;
+      font-size: 27px;
+      letter-spacing: -0.4px;
+    }
+
+    .topo p {
+      margin: 0;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.84);
+      line-height: 1.45;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--linha);
+      border-radius: 20px;
+      box-shadow: var(--sombra);
+      padding: 18px;
+      min-height: 660px;
+    }
+
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .card-head h2 {
+      margin: 0;
+      font-size: 19px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--azul-claro);
+      color: var(--azul);
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .paste-box {
+      min-height: 310px;
+      border: 2px dashed #9fb5d8;
+      border-radius: 18px;
+      background: #f8fbff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 18px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .paste-box.active,
+    .paste-box:hover {
+      border-color: var(--azul);
+      background: #edf4ff;
+    }
+
+    .paste-box img {
+      max-width: 100%;
+      max-height: 278px;
+      border-radius: 14px;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+    }
+
+    .paste-icon {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: #e4efff;
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      margin: 0 auto 12px;
+    }
+
+    .paste-box strong {
+      display: block;
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .paste-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .acoes {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 13px;
+      padding: 12px 14px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      filter: brightness(0.98);
+    }
+
+    .btn-principal {
+      background: var(--azul);
+      color: #ffffff;
+    }
+
+    .btn-secundario {
+      background: var(--azul-claro);
+      color: var(--azul);
+    }
+
+    .btn-verde {
+      background: #e7f8f1;
+      color: var(--verde);
+    }
+
+    .btn-limpar {
+      background: #fff0f0;
+      color: var(--vermelho);
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--linha);
+      border-radius: 14px;
+      background: #f8fbff;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .barra {
+      display: none;
+      height: 8px;
+      background: #dfe8f7;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    .barra span {
+      display: block;
+      width: 0%;
+      height: 100%;
+      background: var(--azul);
+      transition: width 0.2s ease;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 150px;
+      margin-top: 12px;
+      border: 1px solid var(--linha);
+      border-radius: 15px;
+      padding: 12px;
+      font: inherit;
+      resize: vertical;
+      outline: none;
+      color: var(--texto);
+    }
+
+    textarea:focus {
+      border-color: var(--azul);
+      box-shadow: 0 0 0 4px rgba(18, 63, 130, 0.10);
+    }
+
+    .resumo {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .resumo-item {
+      border: 1px solid var(--linha);
+      border-radius: 16px;
+      background: #f8fbff;
+      padding: 13px;
+    }
+
+    .resumo-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .resumo-item strong {
+      display: block;
+      color: var(--azul);
+      font-size: 22px;
+    }
+
+    .lista {
+      display: grid;
+      gap: 10px;
+      max-height: 520px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .curso {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border: 1px solid var(--linha);
+      border-radius: 16px;
+      background: #ffffff;
+      padding: 14px;
+    }
+
+    .curso h3 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.3;
+    }
+
+    .curso button {
+      padding: 9px 11px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .vazio {
+      min-height: 420px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      color: var(--muted);
+      border: 1px dashed #b8c8e1;
+      border-radius: 18px;
+      background: #fbfdff;
+      padding: 28px;
+      line-height: 1.5;
+    }
+
+    .toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      display: none;
+      z-index: 99;
+      border-radius: 13px;
+      padding: 13px 15px;
+      background: #101828;
+      color: #ffffff;
+      font-weight: 700;
+      box-shadow: var(--sombra);
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        width: calc(100% - 18px);
+        padding: 12px 0;
+      }
+
+      .topo {
+        padding: 18px;
+      }
+
+      .topo h1 {
+        font-size: 23px;
+      }
+
+      .acoes,
+      .resumo {
+        grid-template-columns: 1fr;
+      }
+
+      .curso {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .curso button {
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 <body>
-
-<div class="app">
-    <header class="header">
-        <h1 style="margin:0; font-size: 24px;">Sistema Unidade Central</h1>
-        <p style="margin:5px 0 0; opacity: 0.7;">Inteligência Artificial de Matrículas</p>
+  <div class="app">
+    <header class="topo">
+      <h1>Simulador de Cursos Tecnólogos</h1>
+      <p>Cole o print à esquerda. O sistema lê a imagem e mostra à direita somente os nomes dos cursos que constam no PDF de Tecnólogos.</p>
     </header>
 
-    <div class="card">
-        <label>Dados Brutos do Aluno</label>
-        <textarea id="rawInput" placeholder="Cole os dados aqui..."></textarea>
-        
-        <div class="input-row">
-            <div>
-                <label>Origem da Venda</label>
-                <input type="text" id="origem" value="RD STATION">
-            </div>
-            <div>
-                <label>Vendedor</label>
-                <select id="vendedor" onchange="salvarVendedor()">
-                    <option value="Amanda Prado">Amanda Prado</option>
-                    <option value="Ana Flavia Victorino">Ana Flavia Victorino</option>
-                    <option value="Ana Luiza">Ana Luiza</option>
-                    <option value="Beatriz Cunha">Beatriz Cunha</option>
-                    <option value="Bianca Domingues">Bianca Domingues</option>
-                    <option value="Bruna Faria">Bruna Faria</option>
-                    <option value="Cauê Galates">Cauê Galates</option>
-                    <option value="Daniela Moura">Daniela Moura</option>
-                    <option value="Edivania Vital">Edivania Vital</option>
-                    <option value="Fabiana Godoy">Fabiana Godoy</option>
-                    <option value="Gabriel Gorgonio">Gabriel Gorgonio</option>
-                    <option value="Gabriela Campos">Gabriela Campos</option>
-                    <option value="Gabrielle Andrade">Gabrielle Andrade</option>
-                    <option value="Giovana Galdino">Giovana Galdino</option>
-                    <option value="Giseli de Jesus">Giseli de Jesus</option>
-                    <option value="Ketlyn Alves">Ketlyn Alves</option>
-                    <option value="Kevyn Barros">Kevyn Barros</option>
-                    <option value="Letícia Goretti">Letícia Goretti</option>
-                    <option value="Leticia Vieira">Leticia Vieira</option>
-                    <option value="Luana Ferreira">Luana Ferreira</option>
-                    <option value="Maria Isabelle">Maria Isabelle</option>
-                    <option value="Maria Laura">Maria Laura</option>
-                    <option value="Nathalia Domingos">Nathalia Domingos</option>
-                    <option value="Pedro Sales">Pedro Sales</option>
-                </select>
-            </div>
+    <main class="grid">
+      <section class="card">
+        <div class="card-head">
+          <h2>Print ou texto</h2>
+          <span class="tag">Ctrl + V</span>
         </div>
 
-        <div class="input-row">
-            <div>
-                <label>Tipo de Curso</label>
-                <select id="tipo">
-                    <option value="">Selecione...</option>
-                    <option value="Graduação">Graduação</option>
-                    <option value="Tecnólogo">Tecnólogo</option>
-                    <option value="Pós-graduação">Pós-graduação</option>
-                    <option value="2ª Licenciatura">2ª Licenciatura</option>
-                    <option value="R2">R2</option>
-                    <option value="Aperfeiçoamento">Aperfeiçoamento</option>
-                    <option value="Extensão">Extensão</option>
-                    <option value="2ª Graduação">2ª Graduação</option>
-                </select>
-            </div>
-            <div>
-                <label>Nome do Curso</label>
-                <input type="text" id="curso" placeholder="Ex: Pedagogia">
-            </div>
+        <label class="paste-box" id="areaPrint" for="arquivoPrint">
+          <div id="placeholderPrint">
+            <div class="paste-icon">📋</div>
+            <strong>Cole o print aqui</strong>
+            <span>Clique neste quadro e aperte Ctrl + V<br>ou selecione a imagem no computador.</span>
+          </div>
+          <img id="previewPrint" alt="Prévia do print" style="display:none" />
+        </label>
+
+        <input id="arquivoPrint" type="file" accept="image/*" />
+
+        <div class="acoes">
+          <button class="btn-principal" onclick="lerPrint()">Ler print</button>
+          <button class="btn-limpar" onclick="limparTudo()">Limpar</button>
         </div>
 
-        <div class="input-row">
-            <div>
-                <label>Carga Horária</label>
-                <input type="text" id="carga" placeholder="Ex: 1000h">
-            </div>
-            <div>
-                <label>Brinde</label>
-                <input type="text" id="brinde" placeholder="Ex: Tablet">
-            </div>
+        <div class="barra" id="barra"><span></span></div>
+        <div class="status" id="status">Aguardando print. Também é possível colar os nomes dos cursos no campo abaixo.</div>
+
+        <textarea id="textoLido" placeholder="Opcional: cole aqui o texto do print ou os nomes dos cursos. Depois clique em Ler print."></textarea>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2>Cursos que constam no PDF</h2>
+          <span class="tag">Somente nomes</span>
         </div>
 
-        <div class="input-row">
-            <div>
-                <label>Financeiro</label>
-                <select id="financeiro">
-                    <option value="">Pagamento...</option>
-                    <option value="Boleto">Boleto</option>
-                    <option value="Cartão">Cartão</option>
-                    <option value="Quitado">Quitado</option>
-                </select>
-            </div>
-            <div>
-                <label>Valor R$</label>
-                <input type="text" id="valor" placeholder="Selecione um combo ou digite">
-            </div>
+        <div class="resumo">
+          <div class="resumo-item">
+            <span>Encontrados</span>
+            <strong id="qtdEncontrados">0</strong>
+          </div>
+          <div class="resumo-item">
+            <span>Base PDF</span>
+            <strong id="qtdBase">0</strong>
+          </div>
+          <div class="resumo-item">
+            <span>Modalidade</span>
+            <strong style="font-size:16px">Tecnólogos</strong>
+          </div>
         </div>
 
-        <div style="margin-top: 10px;">
-            <label>Vencimento</label>
-            <input type="text" id="vencimento" placeholder="Preenchimento Automático">
+        <div class="acoes" style="margin-bottom:14px">
+          <button class="btn-verde" onclick="copiarTodos()">Copiar nomes</button>
+          <button class="btn-secundario" onclick="mostrarTodos()">Ver todos do PDF</button>
         </div>
 
-        <div style="margin-top: 20px;">
-            <button class="btn btn-p" onclick="processarIA()"><i class="fa-solid fa-wand-magic-sparkles"></i> GERAR REQUERIMENTO AGORA</button>
+        <div id="resultados" class="lista">
+          <div class="mensagem-fixa">Essas são as opções de graduação com conclusão mais rápida para você:</div>
+          <div class="vazio">Nenhum curso encontrado ainda.<br>Cole um print ou texto para verificar na base do PDF.</div>
         </div>
+      </section>
+    </main>
+  </div>
 
-        <div class="actions-group">
-            <label style="text-align: center; margin-bottom: 10px;">Ações Rápidas & Combos</label>
-            
-            <label style="font-size: 9px; margin-top: 10px;">Ed. Física 12 Meses (2ª Graduação)</label>
-            <div class="combo-grid">
-                <button class="btn btn-combo-ef12" onclick="aplicarCombo('Bacharel12')">BACHAREL 12M</button>
-                <button class="btn btn-combo-ef12" onclick="aplicarCombo('Licenc12')">LICENC. 12M</button>
-            </div>
+  <div class="toast" id="toast">Copiado!</div>
 
-            <label style="font-size: 9px; margin-top: 10px;">Ed. Física 4 Anos (Graduação)</label>
-            <div class="combo-grid">
-                <button class="btn btn-combo-ef4" onclick="aplicarCombo('Bacharel4')">BACHAREL 4A</button>
-                <button class="btn btn-combo-ef4" onclick="aplicarCombo('Licenc4')">LICENC. 4A</button>
-            </div>
+  <script>
+    const cursosPDF = [
+      'Gestão do Agronegócio',
+      'Despachante Documentalista',
+      'Investigação e Perícia Jurídica',
+      'Segurança do Trabalho',
+      'Gestão da Produção Industrial',
+      'Gestão da Tecnologia da Informação',
+      'Gestão Pública',
+      'Análise e Desenvolvimento de Sistemas',
+      'Big Data e Inteligência Analítica',
+      'Internet das Coisas',
+      'Jogos Digitais',
+      'Redes de Computadores',
+      'Segurança da Informação',
+      'Sistemas para Internet',
+      'Transformação Digital',
+      'Inteligência Artificial',
+      'Banco de Dados',
+      'Gerência em Saúde',
+      'Gestão Comercial',
+      'Gestão da Atividade Policial',
+      'Gestão da Qualidade',
+      'Gestão de Clínicas e Consultórios',
+      'Gestão de Cooperativas',
+      'Gestão de Investimentos',
+      'Gestão de Lojas e Pontos de Vendas',
+      'Gestão de Recursos Humanos',
+      'Gestão de Registros e Informações em Saúde',
+      'Gestão de Segurança Privada',
+      'Gestão de Turismo',
+      'Gestão de Varejo',
+      'Gestão do Esporte',
+      'Gestão em Farmácia',
+      'Gestão Financeira',
+      'Logística',
+      'Processos Gerenciais',
+      'Recrutamento, Seleção e Desenvolvimento de Pessoas',
+      'Secretariado',
+      'Cidades Inteligentes e Sustentáveis',
+      'Coaching e Desenvolvimento Humano',
+      'Comércio Exterior',
+      'Desenvolvimento Comunitário',
+      'Design de Animação',
+      'Design de Interiores',
+      'Design de Produto',
+      'Design Gráfico',
+      'Embelezamento e Imagem Pessoal',
+      'Empreendedorismo Educacional',
+      'Marketing',
+      'Marketing Digital',
+      'Mediação, Conciliação e Arbitragem',
+      'Mídias Sociais e Digitais',
+      'Ministério Pastoral',
+      'Negócios Imobiliários',
+      'Negócios Sustentáveis e ESG',
+      'Produção de Conteúdos Digitais',
+      'Segurança no Trânsito',
+      'Segurança Pública (Obrigatório Carteirinha Funcional)',
+      'Serviços Jurídicos',
+      'Serviços Jurídicos e Notariais',
+      'Serviços Penais (Obrigatório Carteirinha Funcional)',
+      'Tradutor e Intérprete - Português-Francês',
+      'Serviços Previdenciários',
+      'Perícia Judicial e Extrajudicial',
+      'Criminologia',
+      'Gastronomia',
+      'Produção Audiovisual'
+    ];
 
-            <button class="btn btn-clear" onclick="limparTudo()">LIMPAR FORMULÁRIO</button>
-        </div>
-    </div>
+    const aliases = {
+      'Gestão da Tecnologia da Informação': ['gestao de tecnologia da informacao', 'gestao ti', 'gestao de ti'],
+      'Análise e Desenvolvimento de Sistemas': ['analise e desenvolvimento de sistema', 'analise de sistemas', 'desenvolvimento de sistemas', 'ads'],
+      'Big Data e Inteligência Analítica': ['big data', 'inteligencia analitica'],
+      'Internet das Coisas': ['iot'],
+      'Inteligência Artificial': ['ia'],
+      'Gestão de Recursos Humanos': ['recursos humanos', 'rh'],
+      'Segurança Pública (Obrigatório Carteirinha Funcional)': ['seguranca publica'],
+      'Serviços Penais (Obrigatório Carteirinha Funcional)': ['servicos penais'],
+      'Tradutor e Intérprete - Português-Francês': ['tradutor e interprete portugues frances', 'portugues frances', 'português-francês'],
+      'Perícia Judicial e Extrajudicial': ['pericia judicial e extrajudicial'],
+      'Mídias Sociais e Digitais': ['midias sociais e digitais'],
+      'Negócios Sustentáveis e ESG': ['negocios sustentaveis e esg']
+    };
 
-    <div class="card">
-        <label>Requerimento Pronto para WhatsApp</label>
-        <div class="result" id="output">Os dados processados aparecerão aqui...</div>
-        <button class="btn copy-btn" onclick="copiar()"><i class="fa-solid fa-copy"></i> COPIAR TEXTO</button>
-    </div>
-</div>
+    const stopwords = new Set([
+      'de', 'da', 'do', 'das', 'dos', 'e', 'em', 'no', 'na', 'para', 'com',
+      'curso', 'cursos', 'tecnologo', 'tecnologos', 'tecnologia', 'gestao',
+      'servico', 'servicos', 'obrigatorio', 'carteirinha', 'funcional'
+    ]);
 
-<footer>
-    Desenvolvido por <span class="dev-tag">@Cauê Galates</span> • 2026
-</footer>
+    let imagemAtual = null;
+    let resultadosAtuais = [];
 
-<script>
-    // FUNÇÃO PARA PERSISTIR O VENDEDOR
-    function salvarVendedor() {
-        const selecao = document.getElementById('vendedor').value;
-        localStorage.setItem('vendedorFixo', selecao);
-    }
+    const $ = (id) => document.getElementById(id);
 
-    function carregarVendedor() {
-        const salvo = localStorage.getItem('vendedorFixo');
-        if (salvo) {
-            document.getElementById('vendedor').value = salvo;
+    $('qtdBase').textContent = cursosPDF.length;
+
+    $('arquivoPrint').addEventListener('change', (event) => {
+      const arquivo = event.target.files[0];
+      if (arquivo) carregarImagem(arquivo);
+    });
+
+    document.addEventListener('paste', (event) => {
+      const itens = event.clipboardData?.items || [];
+      for (const item of itens) {
+        if (item.type.indexOf('image') === 0) {
+          carregarImagem(item.getAsFile());
+          return;
         }
+      }
+    });
+
+    $('areaPrint').addEventListener('dragover', (event) => {
+      event.preventDefault();
+      $('areaPrint').classList.add('active');
+    });
+
+    $('areaPrint').addEventListener('dragleave', () => {
+      $('areaPrint').classList.remove('active');
+    });
+
+    $('areaPrint').addEventListener('drop', (event) => {
+      event.preventDefault();
+      $('areaPrint').classList.remove('active');
+      const arquivo = event.dataTransfer.files[0];
+      if (arquivo) carregarImagem(arquivo);
+    });
+
+    function carregarImagem(arquivo) {
+      imagemAtual = arquivo;
+      $('previewPrint').src = URL.createObjectURL(arquivo);
+      $('previewPrint').style.display = 'block';
+      $('placeholderPrint').style.display = 'none';
+      $('status').textContent = 'Print carregado. Clique em Ler print para verificar os cursos no PDF.';
     }
 
-    // Carrega o nome assim que a página abre
-    window.onload = carregarVendedor;
+    async function lerPrint() {
+      const textoManual = $('textoLido').value.trim();
 
-    function calcularVencimentoInteligente() {
-        const hoje = new Date().getDate();
-        if (hoje >= 5 && hoje <= 13) return "10";
-        if (hoje >= 14 && hoje <= 24) return "20";
-        return "30";
+      if (textoManual) {
+        verificarCursos(textoManual);
+        return;
+      }
+
+      if (!imagemAtual) {
+        alert('Cole ou envie um print primeiro.');
+        return;
+      }
+
+      if (!window.Tesseract) {
+        $('status').textContent = 'O leitor de print não carregou. Cole o texto manualmente no campo abaixo.';
+        return;
+      }
+
+      const barra = $('barra');
+      const progresso = barra.querySelector('span');
+      barra.style.display = 'block';
+      progresso.style.width = '0%';
+      $('status').textContent = 'Lendo o print...';
+
+      try {
+        const resultado = await Tesseract.recognize(imagemAtual, 'por+eng', {
+          logger: (m) => {
+            if (m.status === 'recognizing text') {
+              const percentual = Math.round((m.progress || 0) * 100);
+              progresso.style.width = percentual + '%';
+              $('status').textContent = `Lendo o print... ${percentual}%`;
+            }
+          }
+        });
+
+        const texto = resultado?.data?.text || '';
+        $('textoLido').value = texto.trim();
+        verificarCursos(texto);
+      } catch (erro) {
+        console.error(erro);
+        $('status').textContent = 'Não consegui ler o print. Cole o texto manualmente no campo abaixo.';
+      }
     }
 
-    function aplicarCombo(variante) {
-        document.getElementById('financeiro').value = "Boleto";
-        document.getElementById('vencimento').value = calcularVencimentoInteligente();
-        const tipo = document.getElementById('tipo');
-        const valor = document.getElementById('valor');
-        const curso = document.getElementById('curso');
+    function verificarCursos(textoOriginal) {
+      const texto = normalizar(textoOriginal);
+      const linhas = obterLinhas(textoOriginal);
+      const encontrados = [];
 
-        switch(variante) {
-            case 'Bacharel12':
-                tipo.value = "2ª Graduação";
-                valor.value = "1+12X DE R$159,00";
-                curso.value = "BACHAREL EM EDUCAÇÃO FÍSICA 12 MESES";
-                break;
-            case 'Licenc12':
-                tipo.value = "2ª Graduação";
-                valor.value = "1+12X DE R$159,00";
-                curso.value = "LICENCIATURA EM EDUCAÇÃO FÍSICA 12 MESES";
-                break;
-            case 'Bacharel4':
-                tipo.value = "Graduação";
-                valor.value = "1+48x de R$146,86";
-                curso.value = "BACHARELADO EM EDUCAÇÃO FÍSICA 4 ANOS";
-                break;
-            case 'Licenc4':
-                tipo.value = "Graduação";
-                valor.value = "1+48x de R$146,86";
-                curso.value = "LICENCIATURA EM EDUCAÇÃO FÍSICA 4 ANOS";
-                break;
+      cursosPDF.forEach((nome) => {
+        const resultado = correspondeCurso(nome, texto, linhas);
+        if (resultado.encontrado) {
+          encontrados.push({ nome, score: resultado.score, linhaExata: resultado.linhaExata });
         }
+      });
+
+      const limpos = removerFalsosPositivos(encontrados);
+      resultadosAtuais = limpos
+        .sort((a, b) => b.score - a.score || a.nome.localeCompare(b.nome, 'pt-BR'))
+        .map(item => item.nome);
+
+      renderizarResultados(resultadosAtuais);
+      $('qtdEncontrados').textContent = resultadosAtuais.length;
+      $('status').textContent = resultadosAtuais.length
+        ? `Pronto. ${resultadosAtuais.length} curso(s) encontrado(s) no PDF.`
+        : 'Nenhum curso do print foi encontrado no PDF de Tecnólogos.';
+    }
+
+    function correspondeCurso(nome, texto, linhas) {
+      const nomeNormal = normalizar(nome);
+      const termos = [nome, ...(aliases[nome] || [])].map(normalizar).filter(Boolean);
+
+      const linhaExata = linhas.some(linha => termos.some(termo => linha === termo || linha.endsWith(' ' + termo)));
+      if (linhaExata) {
+        return { encontrado: true, score: 100, linhaExata: true };
+      }
+
+      const fraseCompleta = termos.some(termo => termo.length > 5 && contemFrase(texto, termo));
+      if (fraseCompleta && !ehNomeCurtoAmbiguo(nomeNormal)) {
+        return { encontrado: true, score: 96, linhaExata: false };
+      }
+
+      const palavras = palavrasChave(nomeNormal);
+      if (!palavras.length) {
+        return { encontrado: false, score: 0, linhaExata: false };
+      }
+
+      const acertos = palavras.filter(palavra => contemPalavra(texto, palavra)).length;
+      const score = Math.round((acertos / palavras.length) * 100);
+
+      return {
+        encontrado: score >= 86,
+        score,
+        linhaExata: false
+      };
+    }
+
+    function removerFalsosPositivos(lista) {
+      const porNome = new Map();
+      lista.forEach(item => porNome.set(item.nome, item));
+      const unicos = [...porNome.values()];
+      const normais = unicos.map(item => ({ ...item, normal: normalizar(item.nome) }));
+
+      return normais.filter(item => {
+        const nomeCurto = ehNomeCurtoAmbiguo(item.normal);
+        const existeMaior = normais.some(outro => outro.normal !== item.normal && outro.normal.includes(item.normal));
+
+        if (!nomeCurto && !existeMaior) return true;
+        if (item.linhaExata) return true;
+        if (!existeMaior) return true;
+
+        return false;
+      }).map(({ normal, ...item }) => item);
+    }
+
+    function renderizarResultados(lista) {
+      const mensagemFixa = '<div class="mensagem-fixa">Essas são as opções de graduação com conclusão mais rápida para você:</div>';
+
+      if (!lista.length) {
+        $('resultados').innerHTML = mensagemFixa + '<div class="vazio">Nenhum curso encontrado.<br>Confira se o print está legível ou cole o texto manualmente.</div>';
+        return;
+      }
+
+      $('resultados').innerHTML = mensagemFixa + lista.map((nome, index) => `
+        <article class="curso">
+          <h3>${escapeHTML(nome)}</h3>
+          <button class="btn-principal" onclick="copiarCurso(${index})">Copiar</button>
+        </article>
+      `).join('');
+    }
+
+    function mostrarTodos() {
+      resultadosAtuais = [...cursosPDF];
+      renderizarResultados(resultadosAtuais);
+      $('qtdEncontrados').textContent = resultadosAtuais.length;
+      $('status').textContent = 'Mostrando todos os cursos que constam na base do PDF.';
+    }
+
+    function obterCursosDoLadoDireito() {
+      return [...document.querySelectorAll('#resultados .curso h3')]
+        .map(item => item.textContent.trim())
+        .filter(Boolean);
+    }
+
+    function copiarCurso(index) {
+      const cursosDoLadoDireito = obterCursosDoLadoDireito();
+      const curso = cursosDoLadoDireito[index];
+
+      if (!curso) {
+        alert('Nenhum curso para copiar.');
+        return;
+      }
+
+      copiarTexto(montarMensagemCopia([curso]));
+    }
+
+    function copiarTodos() {
+      const cursosDoLadoDireito = obterCursosDoLadoDireito();
+
+      if (!cursosDoLadoDireito.length) {
+        alert('Nenhum curso para copiar.');
+        return;
+      }
+
+      copiarTexto(montarMensagemCopia(cursosDoLadoDireito));
+    }
+
+    function montarMensagemCopia(lista) {
+      return 'Essas são as opções de graduação com conclusão mais rápida para você:\n\n' +
+        lista.map(nome => `• ${nome}`).join('\n');
     }
 
     function limparTudo() {
-        const ids = ['rawInput', 'curso', 'carga', 'brinde', 'valor', 'vencimento'];
-        ids.forEach(id => document.getElementById(id).value = "");
-        document.getElementById('tipo').selectedIndex = 0;
-        document.getElementById('financeiro').selectedIndex = 0;
-        document.getElementById('output').innerText = "Os dados processados aparecerão aqui...";
+      imagemAtual = null;
+      resultadosAtuais = [];
+      $('arquivoPrint').value = '';
+      $('previewPrint').src = '';
+      $('previewPrint').style.display = 'none';
+      $('placeholderPrint').style.display = 'block';
+      $('textoLido').value = '';
+      $('qtdEncontrados').textContent = '0';
+      $('barra').style.display = 'none';
+      $('barra').querySelector('span').style.width = '0%';
+      $('status').textContent = 'Aguardando print. Também é possível colar os nomes dos cursos no campo abaixo.';
+      $('resultados').innerHTML = '<div class="mensagem-fixa">Essas são as opções de graduação com conclusão mais rápida para você:</div><div class="vazio">Nenhum curso encontrado ainda.<br>Cole um print ou texto para verificar na base do PDF.</div>';
     }
 
-    function processarIA() {
-        const raw = document.getElementById('rawInput').value;
-        if (!raw) { alert("Cole os dados primeiro!"); return; }
-
-        if (!document.getElementById('vencimento').value) {
-            document.getElementById('vencimento').value = calcularVencimentoInteligente();
-        }
-
-        const linhas = raw.split('\n').map(l => l.trim()).filter(l => l.length > 1);
-        let aluno = "", mae = "", cpf = "", tel = "", estadoCivil = "", cidade = "";
-        let nomesCandidatos = [];
-        const regexUF = /\s(AC|AL|AP|AM|BA|CE|DF|ES|GO|MA|MT|MS|MG|PA|PB|PR|PE|PI|RJ|RN|RS|RO|RR|SC|SP|SE|TO)$/i;
-
-        linhas.forEach(linha => {
-            const limpa = linha.toLowerCase();
-            const cpfMatch = linha.match(/\d{3}\.?\d{3}\.?\d{3}-?\d{2}/g);
-            if (cpfMatch) {
-                cpfMatch.forEach(m => {
-                    if (m.replace(/\D/g, "").length === 11 && (limpa.includes("cpf") || !cpf)) cpf = m;
-                });
-            }
-            if (limpa.includes("cidade:")) {
-                cidade = linha.split(/cidade:/i)[1].replace(/[:✅]/g, "").trim();
-            } else if (linha.includes("/")) {
-                const partes = linha.split("/");
-                if(partes[1] && partes[1].trim().length === 2) cidade = partes[0].replace(/[:✅]/g, "").trim();
-            } else if (regexUF.test(linha) && !limpa.includes("rua") && !limpa.includes("bairro")) {
-                cidade = linha.replace(regexUF, "").trim();
-            }
-        });
-
-        const ruidos = ["faculdade", "unifahe", "requerimento", "naturalidade", "órgão", "expedidor", "cidade", "estado", "email", "e-mail", "rua", "bairro", "cep", "nascimento", "polo", "central", "tel"];
-
-        linhas.forEach((linha) => {
-            const limpa = linha.toLowerCase();
-            const valorPuro = linha.replace(/Nome completo|Nome da mãe|Nome|Aluno|Mãe/gi, "").replace(/[:✅]/g, "").trim();
-
-            const regexCivil = /(solteiro|solteira|casado|casada|divorciado|divorciada|viúvo|viúva|união)/i;
-            if (regexCivil.test(linha) && !estadoCivil) estadoCivil = linha.match(regexCivil)[0];
-
-            const regexTel = /(?:\(?\d{2}\)?\s?)?(?:9\s?)?\d{4,5}[-\s]?\s?\d{4}/;
-            if (regexTel.test(linha)) {
-                let m = linha.match(regexTel)[0];
-                if (m.replace(/\D/g, "").length >= 10 && m.replace(/\D/g, "") !== (cpf || "").replace(/\D/g, "")) tel = m;
-            }
-
-            const eRuido = ruidos.some(r => limpa.includes(r));
-            const eCidade = cidade && (limpa.includes(cidade.toLowerCase()) || regexUF.test(linha));
-            const temMuitosNumeros = (linha.replace(/\D/g, "").length > 6);
-            
-            if (!eRuido && !eCidade && !temMuitosNumeros && !valorPuro.includes("@") && valorPuro.split(" ").length >= 2) {
-                if (limpa.includes("mãe") || limpa.includes("mae")) {
-                    mae = valorPuro;
-                } else {
-                    nomesCandidatos.push(valorPuro);
-                }
-            }
-        });
-
-        aluno = nomesCandidatos[0] || "";
-        if (!mae) mae = nomesCandidatos[1] || "";
-
-        let foneFinal = (tel || "").replace(/\D/g, "");
-        if (foneFinal.startsWith("55") && foneFinal.length > 11) foneFinal = foneFinal.substring(2);
-        if (foneFinal.length >= 10) {
-            const ddd = foneFinal.substring(0, 2);
-            const resto = foneFinal.substring(2);
-            tel = `(${ddd}) ${resto.length === 9 ? resto.substring(0, 5) : resto.substring(0, 4)}-${resto.substring(resto.length-4)}`;
-        }
-
-        const template = `ℹ REQUERIMENTO COM PRÉ-MATRÍCULA
-Nome Completo: ${aluno.toUpperCase()}
-CPF: ${cpf}
-Nome da Mãe: ${mae.toUpperCase()}
-Estado Civil: ${estadoCivil ? estadoCivil.charAt(0).toUpperCase() + estadoCivil.slice(1) : ""}
-Tel/Cel: ${tel}
-Cidade: ${cidade.toUpperCase()}
-Origem da Venda: ${document.getElementById('origem').value}
-
-📚 Tipo de Curso:
-${["Graduação", "Tecnólogo", "Pós-graduação", "2ª Licenciatura", "R2", "Aperfeiçoamento", "Extensão", "2ª Graduação"].map(t => document.getElementById('tipo').value === t ? `(X) ${t}` : `( ) ${t}`).join('\n')}
-
-Curso: ${document.getElementById('curso').value.toUpperCase()}
-Brinde: ${document.getElementById('brinde').value}
-
-( ) PENDENTE
-( ) NÃO QUIS
-
-Carga Horária: ${document.getElementById('carga').value}
-💰 FINANCEIRO:
-( ${document.getElementById('financeiro').value === 'Boleto' ? 'X' : ' '} ) Boleto
-( ${document.getElementById('financeiro').value === 'Cartão' ? 'X' : ' '} ) Cartão
-( ${document.getElementById('financeiro').value === 'Quitado' ? 'X' : ' '} ) Quitado (valor à vista)
-
-• Valor: R$ ${document.getElementById('valor').value}
-• Vencimento: ${document.getElementById('vencimento').value}
-
-Polo: Unidade Central
-Vendedor: ${document.getElementById('vendedor').value}`;
-
-        document.getElementById('output').innerText = template;
+    async function copiarTexto(texto) {
+      try {
+        await navigator.clipboard.writeText(texto);
+      } catch {
+        const temporario = document.createElement('textarea');
+        temporario.value = texto;
+        document.body.appendChild(temporario);
+        temporario.select();
+        document.execCommand('copy');
+        temporario.remove();
+      }
+      toast('Copiado!');
     }
 
-    function copiar() {
-        const t = document.getElementById('output').innerText;
-        navigator.clipboard.writeText(t).then(() => {
-            const b = document.querySelector('.copy-btn');
-            b.innerHTML = '<i class="fa-solid fa-check"></i> COPIADO!';
-            setTimeout(() => { b.innerHTML = '<i class="fa-solid fa-copy"></i> COPIAR TEXTO'; }, 2000);
-        });
+    function toast(mensagem) {
+      $('toast').textContent = mensagem;
+      $('toast').style.display = 'block';
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => $('toast').style.display = 'none', 1600);
     }
-</script>
+
+    function obterLinhas(texto) {
+      return String(texto || '')
+        .split(/\r?\n/)
+        .map(linha => normalizar(linha).replace(/^[\s•\-*0-9.)]+/, '').trim())
+        .filter(Boolean);
+    }
+
+    function palavrasChave(nomeNormal) {
+      return nomeNormal
+        .split(' ')
+        .map(p => p.trim())
+        .filter(p => p.length > 2 && !stopwords.has(p));
+    }
+
+    function ehNomeCurtoAmbiguo(nomeNormal) {
+      return nomeNormal.split(' ').filter(Boolean).length <= 2;
+    }
+
+    function contemFrase(texto, frase) {
+      const escaped = frase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp(`(^|\\s)${escaped}(\\s|$)`, 'i').test(texto);
+    }
+
+    function contemPalavra(texto, palavra) {
+      const escaped = palavra.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp(`(^|\\s)${escaped}(\\s|$)`, 'i').test(texto);
+    }
+
+    function normalizar(texto) {
+      return String(texto || '')
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[–—]/g, '-')
+        .replace(/[^a-z0-9\s+.-]/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+    }
+
+    function escapeHTML(texto) {
+      return String(texto || '')
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#039;');
+    }
+  </script>
 </body>
 </html>
-
